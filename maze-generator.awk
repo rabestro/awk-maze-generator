@@ -4,12 +4,9 @@
 # - Cols
 
 BEGIN {
-    Cols = 22
-    Rows = 10
+    OFS = ""
     Width = 2 * Cols + 1
     Hight = 2 * Rows + 1
-
-    OFS = ""
 
     create_maze()
     generate_maze()
@@ -21,25 +18,24 @@ function create_maze(   i) {
     for (i = Rows * Cols; i-- > 0;) Maze[cell(i)] = 0
 }
 
-function generate_maze(   current_cell,n_visited,n_cells,next_cell) {
+function generate_maze(   current_cell,next_cell,unvisited_vertices) {
     delete CellStack
-    n_cells = Rows * Cols
-    current_cell = 0
-    n_visited = 1
 
     clear_enter()
-    while (n_visited < n_cells) {
+    current_cell = 0
+    unvisited_vertices = Rows * Cols - 1
+    while (unvisited_vertices) {
         find_valid_neighbors(current_cell)
         if (length(Neighbors) == 0) {
             current_cell = CellStack[length(CellStack)]
             delete CellStack[length(CellStack)]
-            continue
+        } else {
+            next_cell = Neighbors[int(rand()*length(Neighbors))]
+            knock_down_wall(current_cell, next_cell)
+            CellStack[length(CellStack) + 1] = current_cell
+            current_cell = next_cell
+            --unvisited_vertices
         }
-        next_cell = Neighbors[int(rand()*length(Neighbors))]
-        knock_down_wall(current_cell, next_cell)
-        CellStack[length(CellStack) + 1] = current_cell
-        current_cell = next_cell
-        ++n_visited
     }
     clear_exit()
 }
