@@ -4,8 +4,6 @@
 # - Cols
 
 BEGIN {
-    Cols = 22
-    Rows = 10
     Width = 2 * Cols + 1
     Hight = 2 * Rows + 1
 
