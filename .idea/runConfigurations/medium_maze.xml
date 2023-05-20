@@ -4,7 +4,7 @@
     <option name="interpreterParameters" value="gawk -f" />
     <option name="interpreterPath" value="/usr/bin/env" />
     <option name="scriptParameters" value="-v Rows=6 -v Cols=16" />
-    <option name="scriptPath" value="$PROJECT_DIR$/maze-generator.awk" />
+    <option name="scriptPath" value="$PROJECT_DIR$/maze-gen-one.awk" />
     <option name="workingDirectory" value="$PROJECT_DIR$" />
     <method v="2" />
   </configuration>
