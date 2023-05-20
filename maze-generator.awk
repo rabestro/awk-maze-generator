@@ -44,7 +44,6 @@ function generate_maze(   next_node,unvisited_nodes,current_node) {
     }
     clear_exit()
 }
-function random(bound) {return int(rand() * bound)}
 function print_maze(   i) {
     for (i = 0; i < Width * Hight; ++i)
         printf Width - i % Width == 1 ? "%s\n" : "%s", symbol(i)
@@ -67,6 +66,7 @@ function find_valid_neighbors(i) {
 function has_all_walls(node) {
     return Maze[cell(node) + 1] && Maze[cell(node) - 1] && Maze[cell(node) - Width] && Maze[cell(node) + Width]
 }
+function random(bound) {return int(rand() * bound)}
 function is_border(i) {return i % Width == 0 || Width - i % Width == 1}
 function add(node) {if (has_all_walls(node)) Neighbors[length(Neighbors)] = node}
 function knock_down_wall(source, target) {Maze[(cell(source) + cell(target)) / 2] = 0}
