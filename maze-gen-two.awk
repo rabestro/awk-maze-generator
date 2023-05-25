@@ -55,7 +55,7 @@ function generate_maze(row, col,   directions,randDir,dx,dy,newRow,newCol) {
             Grid[row + dy / 2, col + dx / 2] = 0
             generate_maze(newRow, newCol)
         }
-        directions = gensub(randDir, "", "1", directions)
+        sub(randDir, "", directions)
     }
 }
 function clear_doors() {
