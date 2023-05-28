@@ -20,7 +20,7 @@ gawk -f maze-gen-two.awk -v Rows=8 -v Cols=36 -v Seed=42
 
 ### Sample output 
 
-![Maze Sample](maze-sample.png)
+![Maze Sample](../images/maze-sample.png)
 
 ### Make scripts executable 
 
@@ -50,4 +50,4 @@ gawk -f maze-runner.awk sample.maze
 
 ### Sample output of path
 
-![Maze Path](maze-path.png)
+![Maze Path](../images/maze-path.png)
