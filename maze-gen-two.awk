@@ -10,6 +10,7 @@
 # - Seed (optional)
 
 BEGIN {
+    OFS = ""
     Rows = Rows ? Rows : 8
     Cols = Cols ? Cols : 16
     Seed ? srand(Seed) : srand()
