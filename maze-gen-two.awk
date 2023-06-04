@@ -44,19 +44,20 @@ function generate_maze(row, col,   directions,randDir,dx,dy,newRow,newCol) {
     directions = "NESW"
     while (length(directions) > 0) {
         randDir = substr(directions, int(rand() * length(directions)) + 1, 1)
+        sub(randDir, "", directions)
+
         dx = dy = 0
         if (randDir == "N") dy = -2
         if (randDir == "E") dx = 2
         if (randDir == "S") dy = 2
         if (randDir == "W") dx = -2
-
         newRow = row + dy
         newCol = col + dx
+
         if (newRow > 0 && newRow < Height && newCol > 0 && newCol < Width && Grid[newRow, newCol]) {
             Grid[row + dy / 2, col + dx / 2] = 0
             generate_maze(newRow, newCol)
         }
-        sub(randDir, "", directions)
     }
 }
 function clear_doors() {
