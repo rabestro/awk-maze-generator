@@ -33,12 +33,12 @@ function create_grid() {
 }
 
 function generate_maze(source,   directions,direction,target) {
-    visit(source)
+    Grid[source] = 0
     for (directions = "NEWS"; length(directions); sub(direction, "", directions)) {
         direction = substr(directions, int(rand() * length(directions)) + 1, 1)
         target = next_node_index(source, direction)
-        if (is_visited(target)) continue
-        knock_down_wall(source, target)
+        if (!Grid[target]) continue
+        Grid[(source + target) / 2] = 0
         generate_maze(target)
     }
 }
@@ -48,12 +48,9 @@ function clear_doors() {
     Grid[(1 + 2 * int(rand() * Rows)) * Width + Width - 1] = 0
 }
 
-function print_maze(   row, col) {
-    for (row = 0; row < Height; row++) {
-        for (col = 0; col < Width; col++)
-            $(col + 1) = Grid[row * Width + col] ? "##" : "  "
-        print
-    }
+function print_maze() {
+    while (GridSize--)
+        printf (GridSize % Width ? "%s" : "%s\n"), (Grid[GridSize] ? "##" : "  ")
 }
 
 function next_node_index(i, direction) {
@@ -67,7 +64,4 @@ function next_node_index(i, direction) {
         return i - 2
     return -1
 }
-function visit(nodeIndex) {Grid[nodeIndex] = 0}
-function is_visited(target) {return !Grid[target]}
-function knock_down_wall(source, target) {Grid[(source + target) / 2] = 0}
 function die(message) {print message > "/dev/stderr"; exit 1}
