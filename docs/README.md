@@ -39,7 +39,15 @@ This will allow you to run scripts directly without specifying an interpreter.
 ### Save the maze
 
 ```shell
-./maze-gen-two.awk -v Rows=8 -v Cols=36 Seed=42 > sample.maze
+./maze-gen-two.awk -v Rows=8 -v Cols=36 Seed=42 > docs/sample.maze
+```
+
+## Test generated maze
+
+You can run the test script to check the correctness of the maze generator.
+
+```shell    
+gawk -f maze-test.awk -v Rows=18 -v Cols=76 docs/sample.maze
 ```
 
 ## Find the path

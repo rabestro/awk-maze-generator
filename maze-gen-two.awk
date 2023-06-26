@@ -20,7 +20,7 @@ BEGIN {
 
     create_grid()
     generate_maze(1, 1)
-    clear_doors()
+    arrange_doors()
     print_maze()
 }
 
@@ -60,16 +60,18 @@ function generate_maze(row, col,   directions,randDir,dx,dy,newRow,newCol) {
         }
     }
 }
-function clear_doors() {
-    Grid[1 + 2 * int(rand() * Rows), 0] = 0
-    Grid[1 + 2 * int(rand() * Rows), Width - 1] = 0
+function arrange_doors() {
+    MazeEntrance = 1 + 2 * int(rand() * Rows)
+    MazeExit = 1 + 2 * int(rand() * Rows)
 }
 function symbol(row, col,   n,e,s,w) {
-    if (!Grid[row, col])
-        return col == 0 || col == Width - 1 ? "⇨" : " "
+    if (!Grid[row, col]) return " "
+    if (is_door(row, col)) return "⇨"
     n = row ? Grid[row - 1, col] : 0
     e = col < Width - 1 ? Grid[row, col + 1] : 0
     s = row < Height - 1 ? Grid[row + 1, col] : 0
     w = col ? Grid[row, col - 1] : 0
     return substr(" │─└││┌├─┘─┴┐┤┬┼", 1 + n + 2 * e + 4 * s + 8 * w, 1)
 }
+
+function is_door(row, col) {return row == MazeEntrance && col == 0 || row == MazeExit && col == Width - 1}
