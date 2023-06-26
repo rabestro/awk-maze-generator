@@ -12,7 +12,7 @@
 BEGIN {
     setup()
     create_grid()
-    generate_maze(FirstNodeIndex)
+    generate_maze(Width + 1)
     clear_doors()
     print_maze()
 }
@@ -29,7 +29,6 @@ function create_grid() {
     Height = 2 * Rows + 1
     while (GridSize < Width * Height)
         Grid[GridSize++] = 1
-    FirstNodeIndex = Width + 1
 }
 
 function generate_maze(source,   directions,direction,target) {

@@ -7,15 +7,15 @@
 # These variables are initialized on the command line (using '-v'):
 # - Rows
 # - Cols
+#
 function die(message) {print message > "/dev/stderr"; exit 1}
 function assert(condition, message) {if (!condition) die(message)}
-function assertEqual(actual, expected, message) {assert(actual == expected, message)}
-function assertNotEqual(actual, expected, message) {assert(actual != expected, message)}
 
 BEGIN {
     ExpectedCols = Cols * 2 + 1
     ExpectedRows = Rows * 2 + 1
     FPAT = "."
+    OFS = ""
 }
 NF != ExpectedCols {
     die("Error: expected " ExpectedCols " columns, got " NF " at line " NR)
@@ -44,12 +44,13 @@ ENDFILE {
     assert(StartRow, "Error: no start point")
     assert(EndRow, "Error: no end point")
     assert(Height == ExpectedRows, "Error: expected " ExpectedRows " rows, got " Height)
-
-    check_cells()
+    check_symbols()
+    fill_spaces(2, 2)
+    print_maze()
     print "The maze is valid!"
 }
 
-function check_cells(   row,col,cell) {
+function check_symbols(   row,col,cell) {
     for (row = ExpectedRows; row; --row)
         for (col = ExpectedCols; col; --col) {
             cell = Grid[row, col]
@@ -71,4 +72,32 @@ function symbol(row, col,   n,e,s,w) {
     s = row < ExpectedRows && Grid[row + 1, col] != " "
     w = col > 1 && Grid[row, col - 1] != " "
     return substr(" │─└││┌├─┘─┴┐┤┬┼", 1 + n + 2 * e + 4 * s + 8 * w, 1)
+}
+
+function fill_spaces(row, col,   directions,randDir,dx,dy) {
+    assert(Grid[row, col] == " ", "Error: an extra passage detected at " row "," col)
+    Grid[row, col] = "·"
+
+    directions = "NESW"
+    while (length(directions)) {
+        randDir = substr(directions, 1, 1)
+        sub(randDir, "", directions)
+        dx = dy = 0
+        if (randDir == "N") dy = -1
+        if (randDir == "E") dx = 1
+        if (randDir == "S") dy = 1
+        if (randDir == "W") dx = -1
+        if (Grid[row + dy, col + dx] == " ") {
+            Grid[row + dy, col + dx] = "·"
+            fill_spaces(row + 2 * dy, col + 2 * dx)
+        }
+    }
+}
+
+function print_maze(   row, col) {
+    while (row++ < ExpectedRows) {
+        for (col = ExpectedCols; col; --col)
+            $col = Grid[row, col]
+        print
+    }
 }
