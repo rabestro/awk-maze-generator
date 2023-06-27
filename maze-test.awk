@@ -27,14 +27,16 @@ NR > ExpectedRows {
     ++Height
 }
 Height == 1 && !/┌[─┬]+┐/ {
-    die("Error: invalid top border")
+    die("Error: an invalid pattern of the top border")
 }
 $1 == "⇨" {
-    if (StartRow) die("Error: multiple start points at line " NR)
+    assert(!StartRow, "Error: multiple start points at line " NR)
+    assert(Height % 2 == 0, "Error: start point must be at the even row")
     StartRow = Height
 }
 $NF == "⇨" {
     if (EndRow) die("Error: multiple end points at line " NR)
+    assert(Height % 2 == 0, "Error: end point must be at the even row")
     EndRow = Height
 }
 {
@@ -46,8 +48,8 @@ ENDFILE {
     assert(Height == ExpectedRows, "Error: expected " ExpectedRows " rows, got " Height)
     check_symbols()
     fill_spaces(2, 2)
-    print_maze()
-    print "The maze is valid!"
+    check_vertices()
+    print "The maze is valid."
 }
 
 function check_symbols(   row,col,cell) {
@@ -94,10 +96,8 @@ function fill_spaces(row, col,   directions,randDir,dx,dy) {
     }
 }
 
-function print_maze(   row, col) {
-    while (row++ < ExpectedRows) {
-        for (col = ExpectedCols; col; --col)
-            $col = Grid[row, col]
-        print
-    }
+function check_vertices(   row,col) {
+    for (row = 2; row < ExpectedRows; row += 2)
+        for (col = 2; col < ExpectedCols; col += 2)
+            assert(Grid[row, col] != " ", "Error: vertex at " row "," col " is not reachable")
 }
