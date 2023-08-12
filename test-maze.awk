@@ -49,7 +49,7 @@ ENDFILE {
     check_symbols()
     fill_spaces(2, 2)
     check_vertices()
-    print "The maze is valid."
+    print "The maze is perfect."
 }
 
 function check_symbols(   row,col,cell) {
