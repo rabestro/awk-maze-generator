@@ -21,7 +21,7 @@ NF != ExpectedCols {
     die("Error: expected " ExpectedCols " columns, got " NF " at line " NR)
 }
 NR > ExpectedRows {
-    die("Error: expected no more then " ExpectedRows " rows, got " NR)
+    die("Error: expected no more than " ExpectedRows " rows, got " NR)
 }
 {
     ++Height
