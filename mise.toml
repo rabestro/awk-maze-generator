@@ -1,0 +1,41 @@
+[tools]
+bats = "latest"
+
+[env]
+LC_ALL = "en_US.UTF-8"
+
+[tasks.generate]
+description = "Generate a random Unicode maze using Recursive Backtracking (default: 8x36)"
+run = "gawk -f maze-generator.awk -v Rows=${ROWS:-8} -v Cols=${COLS:-36} ${SEED:+-v Seed=$SEED}"
+
+[tasks.generate-dfs]
+description = "Generate a random Unicode maze using Iterative DFS (default: 8x36)"
+run = "gawk -f maze-gen-one.awk -v Rows=${ROWS:-8} -v Cols=${COLS:-36} ${SEED:+-v Seed=$SEED}"
+
+[tasks.ascii]
+description = "Generate an ASCII-only maze (default: 9x21)"
+run = "gawk -f maze-gen-asc.awk -v Rows=${ROWS:-9} -v Cols=${COLS:-21} ${SEED:+-v Seed=$SEED}"
+
+[tasks.solve]
+description = "Generate a maze and immediately trace the solution path"
+run = """
+gawk -f maze-generator.awk -v Rows=${ROWS:-8} -v Cols=${COLS:-36} ${SEED:+-v Seed=$SEED} \
+  | gawk -f maze-runner.awk
+"""
+
+[tasks.validate]
+description = "Validate docs/sample.maze with test-maze.awk"
+run = "gawk -f test-maze.awk -v Rows=18 -v Cols=76 docs/sample.maze"
+
+[tasks.test]
+description = "Run the BATS automated test suite"
+run = "bats test-maze-generator.bats"
+
+[tasks.test-fixtures]
+description = "Run positive and negative fixture tests in test/"
+run = """
+for maze in test/*.maze; do
+  echo "=== $maze ==="
+  gawk -f test-maze.awk -v Rows=18 -v Cols=76 "$maze" || true
+done
+"""

@@ -62,3 +62,19 @@ function validate_maze {
   maze_two=$(gawk --file maze-generator.awk --assign Rows=8 --assign Cols=16 --assign Seed=123)
   [[ $maze_one == "$maze_two" ]]
 }
+
+@test "iterative DFS generator (maze-gen-one.awk) produces a perfect maze" {
+  result="$(
+    gawk --file maze-gen-one.awk --assign Rows=10 --assign Cols=20 --assign Seed=42 \
+    | gawk --file test-maze.awk --assign Rows=10 --assign Cols=20
+  )"
+  [ "$result" = "The maze is perfect." ]
+}
+
+@test "maze-runner.awk finds a valid path through a generated maze" {
+  solved="$(
+    gawk --file maze-generator.awk --assign Rows=8 --assign Cols=16 --assign Seed=42 \
+    | gawk --file maze-runner.awk
+  )"
+  [[ "$solved" == *"⋅"* ]]
+}
